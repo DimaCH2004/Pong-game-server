@@ -1,4 +1,3 @@
-// client/src/hooks/useGame.ts
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import type { Socket } from 'socket.io-client';
@@ -17,7 +16,6 @@ export function useGame() {
 
     // Connection events
     newSocket.on('connect', () => {
-      // Fix: Handle undefined by converting to null
       setPlayerId(newSocket.id ?? null);
     });
 
@@ -46,5 +44,13 @@ export function useGame() {
     }
   };
 
-  return { gameState, playerId, movePaddle };
+  const resetGame = () => {
+    if (socket) {
+      socket.emit('reset-game');
+      // Clear the game state temporarily to trigger re-render
+      setGameState(null);
+    }
+  };
+
+  return { gameState, playerId, movePaddle, resetGame };
 }

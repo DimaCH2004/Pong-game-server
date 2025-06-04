@@ -25,6 +25,20 @@ export function setupSocket(io: Server) {
       game.movePaddle(socket.id, position);
     });
 
+    // Handle game reset
+    socket.on('reset-game', () => {
+      // Set status to resetting
+      const currentState = game.getState();
+      currentState.status = 'resetting';
+      io.emit('game-state', currentState);
+      
+      // Reset after a short delay
+      setTimeout(() => {
+        game.resetGame();
+        io.emit('game-state', game.getState());
+      }, 1000);
+    });
+
     // Handle disconnections
     socket.on('disconnect', () => {
       console.log(`Player disconnected: ${socket.id}`);

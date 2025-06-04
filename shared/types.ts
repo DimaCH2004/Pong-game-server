@@ -18,5 +18,5 @@ export interface GameState {
   player1: Player;
   player2: Player;
   ball: Ball;
-  status: 'waiting' | 'playing' | 'game-over';
+  status: 'waiting' | 'playing' | 'game-over' | 'resetting';
 }
